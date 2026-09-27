@@ -12,8 +12,10 @@ composed a usable explanation and the window threw it away.
 
 from __future__ import annotations
 
+import tomllib
 from pathlib import Path
 
+import delta_retroarch_synchronizer
 from delta_retroarch_synchronizer import launcher, sync
 from delta_retroarch_synchronizer.config import Config
 from delta_retroarch_synchronizer.discovery import Discovery
@@ -254,3 +256,24 @@ def test_a_blocked_system_gets_one_line_not_a_paragraph():
         # Two wrapped lines at most in an 82-column log.
         assert len(system.conversion_summary) < 165, system.key
         assert len(system.conversion_summary) < len(system.conversion_note), system.key
+
+
+def test_taskbar_identity_keeps_the_old_handle_before_1_0():
+    """A new identity is a new app to Windows, so 0.x keeps what pins were made with."""
+    assert launcher.app_id("0.3.0") == "midwestcrip.DeltaRetroArchSynchronizer"
+    assert launcher.app_id("0.10.2") == "midwestcrip.DeltaRetroArchSynchronizer"
+
+
+def test_taskbar_identity_moves_to_the_current_handle_at_1_0():
+    assert launcher.app_id("1.0.0") == "colsontabbert.DeltaRetroArchSynchronizer"
+    assert launcher.app_id("1.0.0rc1") == "colsontabbert.DeltaRetroArchSynchronizer"
+    assert launcher.app_id("2.1") == "colsontabbert.DeltaRetroArchSynchronizer"
+
+
+def test_the_version_the_identity_reads_is_the_released_one():
+    """``app_id`` reads ``__version__`` because pyproject.toml is not in the
+    frozen build. A release that bumped only pyproject.toml would leave the
+    1.0 identity switch waiting on a number that never moves."""
+    pyproject = Path(__file__).resolve().parents[1] / "pyproject.toml"
+    declared = tomllib.loads(pyproject.read_text(encoding="utf-8"))["project"]["version"]
+    assert delta_retroarch_synchronizer.__version__ == declared

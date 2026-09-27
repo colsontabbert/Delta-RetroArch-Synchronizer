@@ -333,5 +333,5 @@ the core-mapping table below).
 > was Claude Code's call and is **Python 3.11+, standard library only** apart
 > from pytest — a deliberate constraint, since a tool people download as an .exe
 > is easier to trust with no dependency tree. The repo was designated and is
-> `midwestcrip/Delta-RetroArch-Synchronizer`, public, with the auto-push hook
+> `colsontabbert/Delta-RetroArch-Synchronizer`, public, with the auto-push hook
 > wired up in `.githooks/`.
