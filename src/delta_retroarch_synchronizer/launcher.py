@@ -32,6 +32,7 @@ from pathlib import Path
 from tkinter import filedialog, font as tkfont, messagebox, simpledialog, ttk
 from typing import Any
 
+from . import __version__
 from . import config as config_module
 from . import delta_writer, discovery, display, dropbox_api, guide, health, naming, paths
 from . import addons, n64, paks, processes, restore, savestate
@@ -45,6 +46,23 @@ from . import sync as sync_module
 from . import systems
 
 WINDOW_TITLE = "Delta-RetroArch Synchronizer"
+
+
+def app_id(version: str = __version__) -> str:
+    """The taskbar identity Windows groups this app's windows and pins under.
+
+    Before 1.0 it keeps the GitHub handle the project started under,
+    ``midwestcrip``, which became ``colsontabbert`` on 2026-09-27. Windows
+    treats a new identity as a different app: a pin made under the old one
+    stops attaching to the running window until it is pinned again. So the
+    switch waits for 1.0, whose release notes can ask for that, and it happens
+    by itself when the version gets there instead of depending on being
+    remembered.
+    """
+    major = int(version.split(".", 1)[0])
+    owner = "colsontabbert" if major >= 1 else "midwestcrip"
+    return f"{owner}.DeltaRetroArchSynchronizer"
+
 
 #: Where a recovered battery save goes when the user does not choose. Never
 #: Delta's folder: that would put a new file into another app's storage and
@@ -2640,7 +2658,7 @@ def main() -> int:
     display.make_process_aware()
     # Without an explicit identity a Python-hosted window is grouped on the
     # taskbar under pythonw.exe and shows its icon, whatever icon we set here.
-    display.set_app_id("midwestcrip.DeltaRetroArchSynchronizer")
+    display.set_app_id(app_id())
 
     root = tk.Tk()
     # A fixed `tk scaling` of 1.25 used to be set here. display.adopt now works
