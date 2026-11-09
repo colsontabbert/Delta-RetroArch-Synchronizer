@@ -2,7 +2,7 @@
 
 Kept deliberately small. Somebody running this on its own wants three
 questions answered -- is everything plugged in, what is on the phone, and get
-it onto my PC -- and the third is a folder copy. Merging into RetroArch's save
+it onto this PC -- and the third is a folder copy. Merging into RetroArch's save
 is the main program's job and is not duplicated here; this window says so and
 names the folder it wrote to.
 

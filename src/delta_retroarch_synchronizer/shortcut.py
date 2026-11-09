@@ -40,8 +40,8 @@ LINK_NAME = f"{paths.APP_NAME}.lnk"
 #:
 #: Asked of Windows rather than built from %APPDATA% and the home directory,
 #: because either can be redirected and the home-directory guess is the one that
-#: fails silently. On the machine this was written for, OneDrive owns the
-#: desktop: the real one is ``C:/Users/<user>/OneDrive/Desktop`` and
+#: fails silently. When OneDrive backs up the desktop, the real one is
+#: ``C:/Users/<user>/OneDrive/Desktop`` and
 #: ``~/Desktop`` **does not exist**, so writing a shortcut there would have
 #: created a folder nobody ever looks at and reported success.
 _FOLDERID_PROGRAMS = "{A77F5D77-2E2B-44C3-A6A2-ABA601054A51}"

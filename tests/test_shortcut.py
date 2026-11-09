@@ -57,8 +57,8 @@ def test_it_asks_windows_where_the_desktop_is(monkeypatch, tmp_path):
     """The obvious construction is wrong on a redirected profile, and wrong in
     the silent way.
 
-    On the machine this was written for, OneDrive owns the desktop: the real
-    one is ``C:/Users/<user>/OneDrive/Desktop`` and ``~/Desktop`` does not
+    When OneDrive backs up the desktop, the real one is
+    ``C:/Users/<user>/OneDrive/Desktop`` and ``~/Desktop`` does not
     exist at all. Building the path from the home directory would have created
     a folder nobody ever looks at and reported success.
     """

@@ -1,0 +1,12 @@
+#!/bin/sh
+# Refuse commit messages with personal details or first-person reasoning,
+# checked by the owner's scanner when it's installed on this machine.
+#
+# Enabled the same way as post-commit: `git config core.hooksPath .githooks`.
+
+scanner="$HOME/.claude/skills/new-project/personal_scan.py"
+if [ -f "$scanner" ] && command -v python >/dev/null 2>&1; then
+  python "$scanner" message "$1" || exit 1
+fi
+
+exit 0

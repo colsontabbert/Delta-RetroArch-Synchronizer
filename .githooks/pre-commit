@@ -1,0 +1,29 @@
+#!/bin/sh
+# Refuse to commit personal content.
+#
+# 1. Interview notes and project briefs, by path. They live in the private notes
+#    folder named in docs/WORKFLOW.md ("Private notes"), never in a project repo.
+#    Deleting them is always allowed (that's how old copies get out).
+# 2. Personal details and first-person reasoning in the added lines, checked by
+#    the owner's scanner when it's installed on this machine (it reads a private
+#    list of markers, so nothing personal is stored in this repo).
+#
+# Enabled the same way as post-commit: `git config core.hooksPath .githooks`.
+
+blocked=$(git diff --cached --name-only --diff-filter=ACMR |
+  grep -E '(^|/)interviews/|^PROJECT_BRIEF\.md$|^docs/brief\.md$|^[^/]*-brief\.md$')
+
+if [ -n "$blocked" ]; then
+  echo "pre-commit: personal notes don't go in the repo. Refused:"
+  echo "$blocked" | sed 's/^/  /'
+  echo "Unstage them (git restore --staged <file>) and move them to the private"
+  echo "notes folder that docs/WORKFLOW.md names under \"Private notes\"."
+  exit 1
+fi
+
+scanner="$HOME/.claude/skills/new-project/personal_scan.py"
+if [ -f "$scanner" ] && command -v python >/dev/null 2>&1; then
+  git diff --cached -U0 --diff-filter=ACMR --no-color | python "$scanner" diff || exit 1
+fi
+
+exit 0
